@@ -2,13 +2,7 @@
   <div class="sw-login" @keyup.enter="invokeLogin">
     <SwPluginSlot name="login-form-before" />
     <div class="form sw-login__form">
-      <SfAlert
-        v-if="userError"
-        class="sw-login__alert"
-        type="danger"
-        :message="userError"
-        data-cy="login-alert"
-      />
+      <SwErrorsList :list="loginErrors" />
       <SwInput
         v-model="email"
         name="loginEmail"
@@ -55,15 +49,16 @@ import { useUser, useSessionContext } from "@shopware-pwa/composables"
 import SwPluginSlot from "sw-plugins/SwPluginSlot.vue"
 import SwButton from "@/components/atoms/SwButton.vue"
 import SwInput from "@/components/atoms/SwInput.vue"
-import { reactive, toRefs } from "@vue/composition-api"
+import { computed, reactive, toRefs } from "@vue/composition-api"
+import SwErrorsList from "@/components/SwErrorsList.vue"
 
 export default {
   name: "SwLogin",
-  components: { SwButton, SwInput, SfAlert, SwPluginSlot },
+  components: { SwButton, SwInput, SfAlert, SwPluginSlot, SwErrorsList },
   setup(props, { root }) {
-    const { login, loading, error: userError } = useUser(root)
+    const { login, loading, errors } = useUser(root)
     const { refreshSessionContext } = useSessionContext(root)
-
+    const loginErrors = computed(() => errors.login || [])
     const state = reactive({
       email: "",
       password: "",
@@ -84,7 +79,7 @@ export default {
     return {
       clientLogin: login,
       isLoading: loading,
-      userError,
+      loginErrors,
       refreshSessionContext,
       $v,
       ...toRefs(state),

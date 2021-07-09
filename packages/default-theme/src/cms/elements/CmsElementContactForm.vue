@@ -132,10 +132,7 @@
 import { SfSelect, SfInput, SfIcon, SfHeading } from "@storefront-ui/vue"
 import useVuelidate from "@vuelidate/core"
 import { required, email, minLength } from "@vuelidate/validators"
-import {
-  mapSalutations,
-  getMessagesFromErrorsArray,
-} from "@shopware-pwa/helpers"
+import { mapSalutations } from "@shopware-pwa/helpers"
 import {
   useSalutations,
   getApplicationContext,
@@ -202,7 +199,7 @@ export default {
         )
         formSent.value = true
       } catch (e) {
-        errorMessages.value = getMessagesFromErrorsArray(e.message)
+        errorMessages.value = e.messages
       }
     }
 
@@ -260,7 +257,11 @@ export default {
       this.$v.$touch()
       if (this.$v.$invalid) {
         this.errorMessages = [
-          this.$t("Please fill form data and check regulations acceptance."),
+          {
+            detail: this.$t(
+              "Please fill form data and check regulations acceptance."
+            ),
+          },
         ]
         return
       }

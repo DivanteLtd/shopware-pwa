@@ -76,7 +76,7 @@ export default {
         success.value = true
       } catch (error) {
         // to do sth with that error
-        console.error("[newsletter-subscribe][onMounted]", error)
+        console.error("[newsletter-subscribe][onMounted]", error.messages)
       } finally {
         isLoading.value = false
       }

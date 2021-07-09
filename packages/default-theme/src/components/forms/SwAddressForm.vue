@@ -155,11 +155,7 @@ import {
   useSalutations,
   useNotifications,
 } from "@shopware-pwa/composables"
-import {
-  mapCountries,
-  mapSalutations,
-  getMessagesFromErrorsArray,
-} from "@shopware-pwa/helpers"
+import { mapCountries, mapSalutations } from "@shopware-pwa/helpers"
 import SwButton from "@/components/atoms/SwButton.vue"
 import SwInput from "@/components/atoms/SwInput.vue"
 import SwErrorsList from "@/components/SwErrorsList.vue"
@@ -226,9 +222,6 @@ export default {
       selectedCountryId,
       getCountries
     )
-    const formErrors = getMessagesFromErrorsArray(
-      userError.value && this.userError.value.message
-    )
 
     // address model ready to be sent to API
     const getAddressModel = computed(() => ({
@@ -260,7 +253,7 @@ export default {
       saveAddress,
       pushError,
       pushSuccess,
-      formErrors,
+      formErrors: userError,
       existingAddress,
       $v: useVuelidate({ $scope: "addressForm", $stopPropagation: true }),
     }

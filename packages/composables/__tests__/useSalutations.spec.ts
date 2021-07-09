@@ -86,13 +86,13 @@ describe("Composables - useSalutations", () => {
     describe("fetchSalutations", () => {
       it("should assing error to error message if getAvailableSalutations throws one", async () => {
         mockedApiClient.getAvailableSalutations.mockRejectedValueOnce({
-          message: "Couldn't fetch available salutations.",
+          messages: [{ detail: "Couldn't fetch available salutations." }],
         });
         const { fetchSalutations, error } = useSalutations(rootContextMock);
         await fetchSalutations();
-        expect(error.value.toString()).toBe(
-          "Couldn't fetch available salutations."
-        );
+        expect(error.value).toStrictEqual([
+          { detail: "Couldn't fetch available salutations." },
+        ]);
       });
     });
     describe("onMounted", () => {

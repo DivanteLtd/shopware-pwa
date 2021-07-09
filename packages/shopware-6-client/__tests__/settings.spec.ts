@@ -6,7 +6,7 @@ import {
 } from "@shopware-pwa/shopware-6-client";
 import { defaultInstance, _createInstance } from "../src/apiService";
 import { ConfigChangedArgs } from "../src";
-import { random } from "faker";
+import { datatype } from "faker";
 import { defaultPwaConfigFile } from "@shopware-pwa/commons";
 const consoleWarnSpy = jest.spyOn(console, "warn");
 
@@ -122,7 +122,7 @@ describe("Settings", () => {
 
   describe("onConfigChange", () => {
     it("should notify, when update method has been called", () => {
-      const contextToken = random.uuid();
+      const contextToken = datatype.uuid();
       onConfigChange((configChangedArgs: ConfigChangedArgs) => {
         expect(configChangedArgs.config.contextToken).toEqual(contextToken);
       });

@@ -2,7 +2,7 @@ import {
   createResponseInterceptor,
   errorInterceptor,
 } from "../src/interceptors";
-import { random } from "faker";
+import { datatype } from "faker";
 
 describe("apiInterceptors", () => {
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe("apiInterceptors", () => {
   });
   describe("createResponseInterceptor", () => {
     it("should update contextToken after any request", async () => {
-      const contextToken = random.uuid();
+      const contextToken = datatype.uuid();
       const updateMethod = jest.fn();
       const responseInterceptor = createResponseInterceptor(updateMethod);
       responseInterceptor({
@@ -24,7 +24,7 @@ describe("apiInterceptors", () => {
     });
 
     it("should get contextToken from response, not header, if there is one", () => {
-      const contextToken = random.uuid();
+      const contextToken = datatype.uuid();
       const updateMethod = jest.fn();
       const responseInterceptor = createResponseInterceptor(updateMethod);
       responseInterceptor({
@@ -51,7 +51,7 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(500);
-        expect(e.message).toEqual("Internal server error");
+        expect(e.messages).toEqual([]);
       }
     });
     it("should throw an error with no message if errors array is null", async () => {
@@ -63,7 +63,7 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(404);
-        expect(e.message).toBe(undefined);
+        expect(e.messages).toStrictEqual([]);
       }
     });
     it("should have error with no message when the error has no detail property", async () => {
@@ -75,7 +75,7 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(404);
-        expect(e.message).toBe(undefined);
+        expect(e.messages).toStrictEqual([]);
       }
     });
 
@@ -106,7 +106,7 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(404);
-        expect(e.message).toBe("Resource not found");
+        expect(e.messages).toStrictEqual([{ detail: "Resource not found" }]);
       }
     });
     it("should return object with error message taken from array's first element", async () => {
@@ -126,7 +126,10 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(403);
-        expect(e.message).toBe("Customer is not logged in.");
+        expect(e.messages).toStrictEqual([
+          { detail: "Customer is not logged in." },
+          { detail: "" },
+        ]);
       }
     });
     it("should return origin errors array in case of 400", async () => {
@@ -146,7 +149,7 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(400);
-        expect(e.message).toStrictEqual([
+        expect(e.messages).toStrictEqual([
           { detail: "Param X is required." },
           { detail: "Param Y should not be blank." },
         ]);
@@ -159,7 +162,7 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(400);
-        expect(e.message).toBe(undefined);
+        expect(e.messages).toStrictEqual([]);
       }
     });
     it("should return general message in case of 500", async () => {
@@ -179,7 +182,10 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(500);
-        expect(e.message).toBe("Internal server error");
+        expect(e.messages).toStrictEqual([
+          { detail: "Param X is required." },
+          { detail: "Param Y should not be blank." },
+        ]);
       }
     });
     it("should recognize the timeout rejection in axios specific case (timeout in config reached)", async () => {
@@ -189,7 +195,16 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(408);
-        expect(e.message).toBe("timeout of 5ms");
+        expect(e.messages).toStrictEqual([
+          {
+            code: "",
+            detail: "timeout of 5ms",
+            meta: {},
+            source: {},
+            status: "",
+            title: "",
+          },
+        ]);
       }
     });
     it("should recognize the Network error rejection in axios specific case (there is no internet connection - offline mode is on)", async () => {
@@ -199,7 +214,16 @@ describe("apiInterceptors", () => {
         expect("didn't throw an error").toEqual("should throw an error");
       } catch (e) {
         expect(e.statusCode).toEqual(0);
-        expect(e.message).toBe("Network Error");
+        expect(e.messages).toStrictEqual([
+          {
+            code: "",
+            detail: "Network Error",
+            meta: {},
+            source: {},
+            status: "",
+            title: "",
+          },
+        ]);
       }
     });
   });

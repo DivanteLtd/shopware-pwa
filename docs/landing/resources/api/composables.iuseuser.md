@@ -24,7 +24,7 @@ export interface IUseUser
 |  [country](./composables.iuseuser.country.md) | Ref&lt;Country \| null&gt; | <b><i>(BETA)</i></b> |
 |  [deleteAddress](./composables.iuseuser.deleteaddress.md) | (addressId: string) =&gt; Promise&lt;boolean&gt; | <b><i>(BETA)</i></b> |
 |  [error](./composables.iuseuser.error.md) | Ref&lt;any&gt; | <b><i>(BETA)</i></b> |
-|  [errors](./composables.iuseuser.errors.md) | UnwrapRef&lt;{ login: string; register: string\[\]; }&gt; | <b><i>(BETA)</i></b> |
+|  [errors](./composables.iuseuser.errors.md) | UnwrapRef&lt;{ login: ShopwareError\[\]; register: ShopwareError\[\]; resetPassword: ShopwareError\[\]; updatePassword: ShopwareError\[\]; updateEmail: ShopwareError\[\]; }&gt; | <b><i>(BETA)</i></b> |
 |  [getOrderDetails](./composables.iuseuser.getorderdetails.md) | (orderId: string) =&gt; Promise&lt;Order \| undefined&gt; | <b><i>(BETA)</i></b> |
 |  [isCustomerSession](./composables.iuseuser.iscustomersession.md) | ComputedRef&lt;boolean&gt; | <b><i>(BETA)</i></b> |
 |  [isGuestSession](./composables.iuseuser.isguestsession.md) | ComputedRef&lt;boolean&gt; | <b><i>(BETA)</i></b> |

@@ -6,10 +6,12 @@
       alt="leaves"
     />
     <SfHeading
+      v-for="error in error.messages"
+      :key="error.code"
       class="error-page__heading"
       :level="1"
-      :title="`${code}`"
-      :description="$t(message)"
+      :title="`${error.title}`"
+      :description="$t(error.detail)"
     />
     <div class="error-page__actions">
       <SwButton
@@ -58,18 +60,7 @@ export default {
   props: {
     error: {
       type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    code() {
-      return this.error.statusCode
-    },
-    message() {
-      return getMessageForCode(this.code) || this.error.message
+      default: () => ({}),
     },
   },
 }

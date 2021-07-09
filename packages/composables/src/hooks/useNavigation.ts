@@ -85,7 +85,7 @@ export const useNavigation = (
       sharedElements.value = navigationResponse || [];
     } catch (e) {
       sharedElements.value = [];
-      console.error("[useNavigation][loadNavigationElements]", e);
+      console.error("[useNavigation][loadNavigationElements]", e.messages);
     }
   };
 

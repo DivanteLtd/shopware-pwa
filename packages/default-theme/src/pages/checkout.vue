@@ -118,7 +118,6 @@ import {
   useCart,
   getApplicationContext,
 } from "@shopware-pwa/composables"
-import { getMessagesFromErrorsArray } from "@shopware-pwa/helpers"
 import { computed, ref, watch } from "@vue/composition-api"
 import { handlePayment } from "@shopware-pwa/shopware-6-client"
 import SwRegistrationForm from "@/components/forms/SwRegistrationForm.vue"
@@ -161,16 +160,7 @@ export default {
       }
       await register(registrationFormData.value)
     }
-    // temporary fix for accessing the errors in right format
-    // TODO: https://github.com/vuestorefront/shopware-pwa/issues/1498
-    const registrationFormErrors = computed(() =>
-      getMessagesFromErrorsArray(
-        (Array.isArray(errors.register) &&
-          errors.register.length &&
-          errors.register[0]) ||
-          ([] as any)
-      )
-    )
+    const registrationFormErrors = computed(() => errors.register)
 
     const getRedirectUrl = (handlePaymentResponse: {
       apiAlias: string

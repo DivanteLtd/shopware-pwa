@@ -111,7 +111,7 @@ export function getListingAvailableFilters(aggregations: Aggregations | undefine
 // @beta (undocumented)
 export function getListingFilters(aggregations: Aggregations | undefined | null): ListingFilter[];
 
-// @alpha
+// @alpha @deprecated
 export function getMessagesFromErrorsArray(errors: ShopwareError[]): string[];
 
 // @alpha

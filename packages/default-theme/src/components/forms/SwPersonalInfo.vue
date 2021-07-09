@@ -100,7 +100,6 @@ import {
 } from "@vuelidate/validators"
 import { SfIcon } from "@storefront-ui/vue"
 import { useUser } from "@shopware-pwa/composables"
-import { getMessagesFromErrorsArray } from "@shopware-pwa/helpers"
 import SwButton from "@/components/atoms/SwButton.vue"
 import SwInput from "@/components/atoms/SwInput.vue"
 import SwErrorsList from "@/components/SwErrorsList.vue"
@@ -116,7 +115,7 @@ export default {
   setup(props, { root }) {
     const {
       user,
-      error: userError,
+      errors: userError,
       updatePersonalInfo,
       refreshUser,
       updateEmail,
@@ -151,9 +150,7 @@ export default {
   },
   computed: {
     getErrorMessage() {
-      return getMessagesFromErrorsArray(
-        this.userError && this.userError.message
-      )
+      return this.userError.updateEmail
     },
     isEmailChanging() {
       return this.email !== (this.user && this.user.email)

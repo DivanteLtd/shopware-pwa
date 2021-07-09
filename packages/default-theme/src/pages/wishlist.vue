@@ -92,7 +92,7 @@ export default {
           products.value = result.elements
         }
       } catch (e) {
-        console.error(e)
+        console.error("[wishlist][loadProductsByItemIds]", e.messages)
       }
       isLoading.value = false
     }

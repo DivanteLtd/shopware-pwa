@@ -1,6 +1,6 @@
 import { addPromotionCode } from "../../../src";
 import { defaultInstance } from "../../../src/apiService";
-import { random } from "faker";
+import { datatype } from "faker";
 
 jest.mock("../../../src/apiService");
 const mockedApiInstance = defaultInstance as jest.Mocked<
@@ -19,8 +19,8 @@ describe("CartService - addPromotionCode", () => {
   it("should call valid endpoint and return a cart", async () => {
     mockedPost.mockResolvedValueOnce({
       data: {
-        name: random.uuid(),
-        token: random.uuid(),
+        name: datatype.uuid(),
+        token: datatype.uuid(),
         price: {
           netPrice: 150,
         },

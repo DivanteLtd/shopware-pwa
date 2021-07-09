@@ -108,7 +108,7 @@ export default {
       } catch (error) {
         console.warn(
           "CmsElementCategoryNavigation:onMounted:getStoreNavigation",
-          error
+          error.messages
         )
       }
     })

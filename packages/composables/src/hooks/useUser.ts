@@ -30,7 +30,10 @@ import {
   AddressType,
 } from "@shopware-pwa/commons/interfaces/models/checkout/customer/CustomerAddress";
 import { CustomerRegistrationParams } from "@shopware-pwa/commons/interfaces/request/CustomerRegistrationParams";
-import { ClientApiError } from "@shopware-pwa/commons/interfaces/errors/ApiError";
+import {
+  ClientApiError,
+  ShopwareError,
+} from "@shopware-pwa/commons/interfaces/errors/ApiError";
 import { Country } from "@shopware-pwa/commons/interfaces/models/system/country/Country";
 import { Salutation } from "@shopware-pwa/commons/interfaces/models/system/salutation/Salutation";
 import {
@@ -63,8 +66,11 @@ export interface IUseUser {
   loading: Ref<boolean>;
   error: Ref<any>;
   errors: UnwrapRef<{
-    login: string;
-    register: string[];
+    login: ShopwareError[];
+    register: ShopwareError[];
+    resetPassword: ShopwareError[];
+    updatePassword: ShopwareError[];
+    updateEmail: ShopwareError[];
   }>;
   isLoggedIn: ComputedRef<boolean>;
   isCustomerSession: ComputedRef<boolean>;
@@ -131,11 +137,17 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
   const loading: Ref<boolean> = ref(false);
   const error: Ref<any> = ref(null);
   const errors: UnwrapRef<{
-    login: string;
-    register: string[];
+    login: ShopwareError[];
+    register: ShopwareError[];
+    resetPassword: ShopwareError[];
+    updatePassword: ShopwareError[];
+    updateEmail: ShopwareError[];
   }> = reactive({
-    login: "",
+    login: [],
     register: [],
+    resetPassword: [],
+    updatePassword: [],
+    updateEmail: [],
   });
   const orders: Ref<Order[] | null> = ref(null);
   const addresses = computed(() => storeAddresses.value);
@@ -149,6 +161,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
   }: { username?: string; password?: string } = {}): Promise<boolean> => {
     loading.value = true;
     error.value = null;
+    errors.login = [] as any;
     try {
       await apiLogin({ username, password }, apiInstance);
       await refreshUser();
@@ -158,7 +171,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       return true;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      errors.login = err.messages;
       broadcast(INTERCEPTOR_KEYS.ERROR, {
         methodName: `[${contextName}][login]`,
         inputParams: {},
@@ -187,7 +200,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       const err: ClientApiError = e;
       // temporary workaround - get rid of such hacks in the future
       // TODO: https://github.com/vuestorefront/shopware-pwa/issues/1498
-      errors.register = [err.message as string];
+      errors.register = err.messages;
       broadcast(INTERCEPTOR_KEYS.ERROR, {
         methodName: `[${contextName}][register]`,
         inputParams: {},
@@ -205,7 +218,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       broadcast(INTERCEPTOR_KEYS.USER_LOGOUT);
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
       broadcast(INTERCEPTOR_KEYS.ERROR, {
         methodName: `[${contextName}][logout]`,
         inputParams: {},
@@ -249,7 +262,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       storeAddresses.value = response?.elements;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 
@@ -258,7 +271,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       country.value = await getUserCountry(userId, apiInstance);
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 
@@ -267,7 +280,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       salutation.value = await getUserSalutation(salutationId, apiInstance);
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 
@@ -296,7 +309,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       await refreshUser();
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
       return false;
     }
 
@@ -311,7 +324,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       return id;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 
@@ -323,7 +336,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       return id;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 
@@ -333,7 +346,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
       return true;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
 
     return false;
@@ -355,9 +368,10 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
     updatePasswordData: CustomerUpdatePasswordParam
   ): Promise<boolean> => {
     try {
+      errors.updatePassword = [];
       await apiUpdatePassword(updatePasswordData, apiInstance);
     } catch (e) {
-      error.value = e;
+      errors.updatePassword = e.messages;
       return false;
     }
     return true;
@@ -369,7 +383,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
     try {
       await apiResetPassword(resetPasswordData, apiInstance);
     } catch (e) {
-      error.value = e;
+      errors.resetPassword = e.messages;
       return false;
     }
     return true;
@@ -381,7 +395,7 @@ export const useUser = (rootContext: ApplicationVueContext): IUseUser => {
     try {
       await apiUpdateEmail(updateEmailData, apiInstance);
     } catch (e) {
-      error.value = e;
+      errors.updateEmail = e.messages;
       return false;
     }
     return true;

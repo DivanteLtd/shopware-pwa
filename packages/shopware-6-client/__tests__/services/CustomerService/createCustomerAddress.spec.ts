@@ -1,4 +1,4 @@
-import { address, name, random } from "faker";
+import { address, name, datatype } from "faker";
 import { createCustomerAddress } from "@shopware-pwa/shopware-6-client";
 import { defaultInstance } from "../../../src/apiService";
 
@@ -9,8 +9,8 @@ const mockedApiInstance = defaultInstance as jest.Mocked<
 
 describe("CustomerService - createCustomerAddress", () => {
   const newAddressData = {
-    countryId: random.uuid(),
-    salutationId: random.uuid(),
+    countryId: datatype.uuid(),
+    salutationId: datatype.uuid(),
     firstName: name.firstName(),
     lastName: name.lastName(),
     zipcode: address.zipCode(),

@@ -128,12 +128,12 @@ describe("Composables - useProduct", () => {
     it("should have failed on bad url settings", async () => {
       const { search, product, error } = useProduct(rootContextMock);
       mockedAxios.getProduct.mockRejectedValueOnce({
-        message: "Something went wrong...",
+        messages: [{ detail: "Something went wrong..." }],
       } as ClientApiError);
       expect(product.value).toBeUndefined();
       await search("");
       expect(product.value).toBeUndefined();
-      expect(error.value).toEqual("Something went wrong...");
+      expect(error.value).toEqual([{ detail: "Something went wrong..." }]);
     });
   });
 });

@@ -81,7 +81,7 @@ export default {
       try {
         await loadNavigationElements({ depth: 3 })
       } catch (e) {
-        console.error("[SwBottomMenu]", e)
+        console.error("[SwBottomMenu]", e.messages)
       }
     })
     return {

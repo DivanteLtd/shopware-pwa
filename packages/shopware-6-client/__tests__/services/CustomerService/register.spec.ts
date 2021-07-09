@@ -1,4 +1,4 @@
-import { name, address, random, phone, internet } from "faker";
+import { name, address, datatype, phone, internet } from "faker";
 import { register } from "@shopware-pwa/shopware-6-client";
 import { getCustomerRegisterEndpoint } from "../../../src/endpoints";
 import { defaultInstance } from "../../../src/apiService";
@@ -19,14 +19,14 @@ describe("CustomerService - register", () => {
       post: mockedPost,
     } as any;
     customerData = {
-      salutationId: random.uuid(),
+      salutationId: datatype.uuid(),
       firstName: name.firstName(),
       lastName: name.lastName(),
       password: internet.password(8),
       email: internet.email(),
       storefrontUrl: internet.domainName(),
       billingAddress: {
-        countryId: random.uuid(),
+        countryId: datatype.uuid(),
         street: address.streetName(),
         zipcode: address.zipCode(),
         city: address.city(),
@@ -36,7 +36,7 @@ describe("CustomerService - register", () => {
   });
 
   it("should register the new customer with basic data provided", async () => {
-    const customerId = random.uuid();
+    const customerId = datatype.uuid();
     mockedPost.mockResolvedValueOnce({ data: customerId });
     const result = await register(customerData);
     expect(mockedPost).toBeCalledTimes(1);

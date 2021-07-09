@@ -104,14 +104,16 @@ describe("Composables - useNavigation", () => {
       });
 
       it("should assign empty array for navigation if the response throws an error", async () => {
-        mockedGetPage.getStoreNavigation.mockRejectedValueOnce("some error");
+        mockedGetPage.getStoreNavigation.mockRejectedValueOnce({
+          messages: [{ detail: "some error" }],
+        });
         const { navigationElements, loadNavigationElements } =
           useNavigation(rootContextMock);
         await loadNavigationElements({ depth: 2 });
         expect(navigationElements.value).toEqual([]);
         expect(consoleErrorSpy).toBeCalledWith(
           "[useNavigation][loadNavigationElements]",
-          "some error"
+          [{ detail: "some error" }]
         );
       });
     });

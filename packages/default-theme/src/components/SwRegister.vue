@@ -1,5 +1,6 @@
 <template>
   <div class="sw-register">
+    <SwErrorsList :list="apiErrors" />
     <SwRegistrationForm
       v-model="registrationFormData"
       @invokeRegister="invokeRegister"
@@ -18,19 +19,21 @@
 import SwRegistrationForm from "@/components/forms/SwRegistrationForm.vue"
 import { useUser } from "@shopware-pwa/composables"
 import useVuelidate from "@vuelidate/core"
-import { ref } from "@vue/composition-api"
+import { ref, computed } from "@vue/composition-api"
 import SwButton from "@/components/atoms/SwButton.vue"
+import SwErrorsList from "@/components/SwErrorsList.vue"
 
 export default {
   name: "SwRegister",
   components: {
     SwRegistrationForm,
     SwButton,
+    SwErrorsList,
   },
   setup(props, { root, emit }) {
     const $v = useVuelidate()
-    const { register } = useUser(root)
-
+    const { register, errors } = useUser(root)
+    const apiErrors = computed(() => errors.register)
     const registrationFormData = ref()
     async function invokeRegister() {
       $v.value.$reset()
@@ -44,6 +47,7 @@ export default {
     return {
       invokeRegister,
       registrationFormData,
+      apiErrors,
     }
   },
 }

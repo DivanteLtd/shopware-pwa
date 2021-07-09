@@ -34,7 +34,7 @@ export const useCountries = (
       _sharedCountried.value = elements;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 

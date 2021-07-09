@@ -84,7 +84,7 @@ describe("Composables - useCountries", () => {
     describe("fetchCoutries", () => {
       it("should assing error to error message if getAvailableCountries throws one", async () => {
         mockedApiClient.getAvailableCountries.mockRejectedValueOnce({
-          message: "Couldn't fetch available countries.",
+          messages: "Couldn't fetch available countries.",
         });
         const { fetchCountries, error } = useCountries(rootContextMock);
         await fetchCountries();

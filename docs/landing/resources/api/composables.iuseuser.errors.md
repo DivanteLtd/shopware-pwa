@@ -11,7 +11,10 @@
 
 ```typescript
 errors: UnwrapRef<{
-        login: string;
-        register: string[];
+        login: ShopwareError[];
+        register: ShopwareError[];
+        resetPassword: ShopwareError[];
+        updatePassword: ShopwareError[];
+        updateEmail: ShopwareError[];
     }>;
 ```

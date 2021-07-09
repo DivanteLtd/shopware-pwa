@@ -35,7 +35,7 @@ export const useSalutations = (
       _salutations.value = elements;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     }
   };
 

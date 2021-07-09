@@ -56,9 +56,6 @@ export async function login(
   { username, password }: { username?: string; password?: string } = {},
   contextInstance: ShopwareApiInstance = defaultInstance
 ): Promise<ContextTokenResponse> {
-  if (!username || !password) {
-    throw new Error("Provide username and password for login");
-  }
   const resp = await contextInstance.invoke.post(getCustomerLoginEndpoint(), {
     username,
     password,

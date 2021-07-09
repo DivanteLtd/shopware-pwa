@@ -75,7 +75,6 @@ import SwButton from "@/components/atoms/SwButton.vue"
 import { newsletterSubscribe } from "@shopware-pwa/shopware-6-client"
 import { ref } from "@vue/composition-api"
 import { getApplicationContext } from "@shopware-pwa/composables"
-import { getMessagesFromErrorsArray } from "@shopware-pwa/helpers"
 import SwErrorsList from "@/components/SwErrorsList.vue"
 
 export default {
@@ -117,7 +116,7 @@ export default {
         )
         formSent.value = true
       } catch (e) {
-        errorMessages.value = getMessagesFromErrorsArray(e.message)
+        errorMessages.value = e.messages
       }
     }
 

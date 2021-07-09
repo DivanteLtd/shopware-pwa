@@ -65,7 +65,6 @@
 <script>
 import { SfHeading, SfDivider } from "@storefront-ui/vue"
 import { addProductReview } from "@shopware-pwa/shopware-6-client"
-import { getMessagesFromErrorsArray } from "@shopware-pwa/helpers"
 import { ref, computed } from "@vue/composition-api"
 import {
   useUser,
@@ -122,7 +121,7 @@ export default {
         wasReviewSent.value = true
       } catch (error) {
         console.error("[SwAddProductReview][submitForm]: ", error)
-        errorMessages.value = getMessagesFromErrorsArray(error.message)
+        errorMessages.value = error.messages
       }
       isSending.value = false
     }

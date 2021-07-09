@@ -69,7 +69,7 @@ export default {
         )
         success.value = true
       } catch (error) {
-        errors.value = [error.message]
+        errors.value = error.messages
       }
     }
 

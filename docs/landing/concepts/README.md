@@ -20,6 +20,12 @@ Checkout and payment are critical parts within every eCommerce application. Lear
 
 → [Payment Guide](./payment)
 
+## Client API Errors and handling
+
+Shopware-pwa provides an unified error's structure for all errors that may appear during working with Shopware 6 API.
+
+→ [API Errors Guide](./api-client-errors)
+
 ## User Management <Badge text="coming soon"/>
 
 How do you manage user data, newsletter sign-ins, address updates? We've got you covered. Follow our guide to show how customize the self-service experience within the PWA.

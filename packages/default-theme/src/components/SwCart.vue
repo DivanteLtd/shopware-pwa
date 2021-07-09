@@ -147,7 +147,7 @@ export default {
         )
         additionalItemsData.value = result.elements
       } catch (error) {
-        console.error("[SwCart][setup][onMounted]", error)
+        console.error("[SwCart][setup][onMounted]", error.messages)
       }
     }
 

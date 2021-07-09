@@ -1,6 +1,6 @@
 import { getCart } from "@shopware-pwa/shopware-6-client";
 import { defaultInstance } from "../../../src/apiService";
-import { random, commerce } from "faker";
+import { datatype, commerce } from "faker";
 
 jest.mock("../../../src/apiService");
 const mockedApiInstance = defaultInstance as jest.Mocked<
@@ -19,23 +19,23 @@ describe("CartService - getCart", () => {
     mockedGet.mockResolvedValueOnce({
       data: {
         data: {
-          name: random.uuid(),
-          token: random.uuid(),
+          name: datatype.uuid(),
+          token: datatype.uuid(),
           lineItems: [
             {
-              id: random.uuid(),
+              id: datatype.uuid(),
               label: commerce.productName(),
               quantity: 5,
               payload: {
-                productNumber: random.uuid(),
+                productNumber: datatype.uuid(),
               },
             },
             {
-              id: random.uuid(),
+              id: datatype.uuid(),
               label: commerce.productName(),
               quantity: 3,
               payload: {
-                productNumber: random.uuid(),
+                productNumber: datatype.uuid(),
               },
             },
           ],

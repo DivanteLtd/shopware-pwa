@@ -1,10 +1,10 @@
-import { name, random } from "faker";
+import { name, datatype } from "faker";
 import { defaultInstance } from "../../../src/apiService";
 import { updateProfile } from "@shopware-pwa/shopware-6-client";
 import { getCustomerDetailsUpdateEndpoint } from "../../../src/endpoints";
 
 const customerData = {
-  salutationId: random.uuid(),
+  salutationId: datatype.uuid(),
   firstName: name.firstName(),
   lastName: name.lastName(),
   title: "d",

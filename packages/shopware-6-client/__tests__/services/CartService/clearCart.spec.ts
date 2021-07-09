@@ -1,6 +1,6 @@
 import { clearCart } from "@shopware-pwa/shopware-6-client";
 import { defaultInstance } from "../../../src/apiService";
-import { random } from "faker";
+import { datatype } from "faker";
 
 jest.mock("../../../src/apiService");
 const mockedApiInstance = defaultInstance as jest.Mocked<
@@ -8,7 +8,7 @@ const mockedApiInstance = defaultInstance as jest.Mocked<
 >;
 
 describe("CartService - clearCart", () => {
-  let contextToken = random.uuid();
+  let contextToken = datatype.uuid();
 
   const mockedPost = jest.fn();
   beforeEach(() => {

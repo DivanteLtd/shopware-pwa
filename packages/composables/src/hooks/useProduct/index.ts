@@ -70,7 +70,7 @@ export const useProduct = (
       return result;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     } finally {
       loading.value = false;
     }

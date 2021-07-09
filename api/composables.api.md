@@ -42,6 +42,7 @@ import { SessionContext } from '@shopware-pwa/commons/interfaces/response/Sessio
 import { ShippingAddress } from '@shopware-pwa/commons/interfaces/models/checkout/customer/ShippingAddress';
 import { ShippingMethod } from '@shopware-pwa/commons/interfaces/models/checkout/shipping/ShippingMethod';
 import { ShopwareApiInstance } from '@shopware-pwa/shopware-6-client';
+import { ShopwareError } from '@shopware-pwa/commons/interfaces/errors/ApiError';
 import { ShopwareSearchParams } from '@shopware-pwa/commons/interfaces/search/SearchCriteria';
 import { Sort } from '@shopware-pwa/commons/interfaces/search/SearchCriteria';
 import { StoreNavigationElement } from '@shopware-pwa/commons/interfaces/models/content/navigation/Navigation';
@@ -379,8 +380,11 @@ export interface IUseUser {
     error: Ref<any>;
     // (undocumented)
     errors: UnwrapRef<{
-        login: string;
-        register: string[];
+        login: ShopwareError[];
+        register: ShopwareError[];
+        resetPassword: ShopwareError[];
+        updatePassword: ShopwareError[];
+        updateEmail: ShopwareError[];
     }>;
     // (undocumented)
     getOrderDetails: (orderId: string) => Promise<Order | undefined>;

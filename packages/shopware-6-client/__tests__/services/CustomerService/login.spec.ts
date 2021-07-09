@@ -21,6 +21,16 @@ describe("CustomerService - login", () => {
       post: mockedPost,
     } as any;
   });
+  it("should invoke a POST request with given parameters", async () => {
+    mockedPost.mockResolvedValueOnce({ data: {} } as any);
+
+    await login(undefined);
+    expect(mockedPost).toBeCalledTimes(1);
+    expect(mockedPost).toBeCalledWith(getCustomerLoginEndpoint(), {
+      username: undefined,
+      password: undefined,
+    });
+  });
   it("should return context token in new format if old does not exist", async () => {
     mockedPost.mockResolvedValueOnce({
       data: { contextToken: "RmzTExFStSBW5GhPmQNicSK6bhUQhqXi" },
@@ -70,15 +80,5 @@ describe("CustomerService - login", () => {
       username: credentials.username,
       password: "wrong-password-123456",
     });
-  });
-
-  it("should throw error on no arguments", async () => {
-    mockedPost.mockRejectedValue(new Error());
-
-    await expect(login()).rejects.toThrowError(
-      "Provide username and password for login"
-    );
-
-    expect(mockedPost).not.toBeCalled();
   });
 });

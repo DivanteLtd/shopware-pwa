@@ -1,7 +1,7 @@
 <template>
   <div class="sw-reset-password" @keyup.enter="invokeResetPassword">
+    <SwErrorsList :list="resetPasswordErrors" />
     <div v-if="!emailSent" class="form sw-reset-password__form">
-      <!-- <h2 class="sw-reset-password__header">Reset password</h2> -->
       <SfAlert
         v-if="userError"
         class="sw-reset-password__alert"
@@ -47,23 +47,24 @@ import { required, email } from "@vuelidate/validators"
 import { useUser } from "@shopware-pwa/composables"
 import SwButton from "@/components/atoms/SwButton.vue"
 import SwInput from "@/components/atoms/SwInput.vue"
+import SwErrorsList from "@/components/SwErrorsList.vue"
+import { computed } from "@vue/composition-api"
 
 export default {
   name: "SwResetPassword",
-  components: { SwButton, SwInput, SfAlert, SfHeading },
+  components: { SwButton, SwInput, SfAlert, SfHeading, SwErrorsList },
   data() {
     return {
       email: "",
-      error: "",
       emailSent: false,
     }
   },
   setup(props, { root }) {
-    const { resetPassword, error: userError } = useUser(root)
+    const { resetPassword, errors } = useUser(root)
     return {
       resetPassword,
-      userError,
       $v: useVuelidate(),
+      resetPasswordErrors: computed(() => errors.resetPassword || []),
     }
   },
   validations: {

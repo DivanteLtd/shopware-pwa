@@ -1,7 +1,7 @@
 import { AxiosResponse, AxiosError } from "axios";
 
 /**
- * @alpha
+ * @beta
  */
 export interface ShopwareError {
   status: string;
@@ -25,6 +25,6 @@ export interface ShopwareApiError extends AxiosError {
  * @alpha
  */
 export interface ClientApiError {
-  message: string | ShopwareError[];
+  messages: ShopwareError[];
   statusCode: number;
 }

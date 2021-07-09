@@ -1,6 +1,6 @@
 import { removeCartItem } from "@shopware-pwa/shopware-6-client";
 import { defaultInstance } from "../../../src/apiService";
-import { random } from "faker";
+import { datatype } from "faker";
 
 jest.mock("../../../src/apiService");
 const mockedApiInstance = defaultInstance as jest.Mocked<
@@ -20,8 +20,8 @@ describe("CartService - removeCartItem", () => {
     mockedDelete.mockResolvedValueOnce({
       data: {
         data: {
-          name: random.uuid(),
-          token: random.uuid(),
+          name: datatype.uuid(),
+          token: datatype.uuid(),
           lineItems: [],
         },
       },

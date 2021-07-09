@@ -87,7 +87,7 @@ export const useCart = (rootContext: ApplicationVueContext): IUseCart => {
       _storeCart.value = result;
     } catch (e) {
       const err: ClientApiError = e;
-      error.value = err.message;
+      error.value = err.messages;
     } finally {
       loading.value = false;
     }

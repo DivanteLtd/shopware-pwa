@@ -35,13 +35,13 @@ export default {
     SwProductListing,
     SwProductListingFilters,
   },
-  asyncData: async ({ params, app, error: errorView, query }) => {
+  asyncData: async ({ app, query }) => {
     const { initSearch } = useListing(app, "productSearchListing")
 
     try {
       await initSearch(query)
     } catch (e) {
-      console.error("[search] Problem with initial search", e)
+      console.error("[search] Problem with initial search", e.messages)
     }
 
     return {}
