@@ -27,7 +27,8 @@
     "query-string": "^7.0.1"
   },
   "devDependencies": {
-    "@types/query-string": "^6.3.0"
+    "@types/query-string": "^6.3.0",
+    "idb": "^6.0.0"
   },
   "license": "MIT",
   "publishConfig": {

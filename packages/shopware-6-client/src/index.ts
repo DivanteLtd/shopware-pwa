@@ -1,45 +1,20 @@
-import { defaultInstance, ConfigChangedArgs } from "./apiService";
-import { ClientSettings } from "./settings";
-export { ClientSettings } from "./settings";
-export {
-  createInstance,
-  ConfigChangedArgs,
-  ShopwareApiInstance,
-} from "./apiService";
+export * from "./index.inner";
 
-export * from "./services/categoryService";
-export * from "./services/productService";
-export * from "./services/customerService";
-export * from "./services/contextService";
-export * from "./services/cartService";
-export * from "./services/navigationService";
-export * from "./services/pageService";
-export * from "./services/checkoutService";
-export * from "./services/pluginService";
-export * from "./services/searchService";
-export * from "./services/formsService";
-export * from "./endpoints";
+// Explicitly import offline overrides and alias them
 
-/**
- * @beta
- */
-export const config: ClientSettings = defaultInstance.config;
-/**
- * Setup configuration. Merge default values with provided in param.
- * This method will override existing config. For config update invoke **update** method.
- * @beta
- */
-export const setup: (config?: ClientSettings) => void = defaultInstance.setup;
+// Product Listing
+import { getCategoryProducts as offlineGetCategoryProducts } from "./offline-services/productService";
 
-/**
- * Update current configuration. This will change only provided values.
- * @beta
- */
-export const update: (config?: ClientSettings) => void = defaultInstance.update;
+const getCategoryProducts = offlineGetCategoryProducts;
 
-/**
- * @beta
- */
-export const onConfigChange: (
-  fn: (context: ConfigChangedArgs) => void
-) => void = defaultInstance.onConfigChange;
+// Product Search
+import {
+  searchProducts as offlineSearchProducts,
+  searchSuggestedProducts as offlineSearchSuggestedProducts,
+} from "./offline-services/searchService";
+
+const searchProducts = offlineSearchProducts;
+const searchSuggestedProducts = offlineSearchSuggestedProducts;
+
+// Re-export them with original name, because local modules have priority in bundler
+export { searchProducts, searchSuggestedProducts, getCategoryProducts };
