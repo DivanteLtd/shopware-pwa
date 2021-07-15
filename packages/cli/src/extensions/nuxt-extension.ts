@@ -63,6 +63,11 @@ module.exports = (toolbox: GluegunToolbox) => {
         },
       });
     }
+    const isEnvFileCreated = exists(".env");
+    const isTemplateEnvFile = exists(".env.template");
+    if (!isEnvFileCreated && isTemplateEnvFile) {
+      await toolbox.filesystem.copyAsync(".env.template", ".env");
+    }
   };
 
   toolbox.copyThemeFolder = async (folderName, destination) => {

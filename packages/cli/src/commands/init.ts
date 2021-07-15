@@ -1,5 +1,6 @@
 import { getDefaultConfigFile } from "@shopware-pwa/commons";
 import { GluegunToolbox } from "gluegun";
+import path from "path";
 
 module.exports = {
   name: "init",
@@ -19,8 +20,6 @@ module.exports = {
     if (!toolbox.isProduction) {
       warning(`You're running CLI in development mode!`);
     }
-
-    const availablePwaVersions = await toolbox.shopware.getPwaVersions();
 
     const currentSetup = await getDefaultConfigFile();
     toolbox.reloadInputParameters({
@@ -53,18 +52,10 @@ module.exports = {
         message: "Shopware instance access token:",
         initial: inputParameters.shopwareAccessToken,
       };
-      const stageQuestion = {
-        type: "select",
-        name: "stage",
-        message: "Which version you'd like to use:",
-        choices: availablePwaVersions,
-        initial: inputParameters.stage,
-      };
 
       const answers = await toolbox.prompt.ask([
         shopwareEndpointQuestion,
         shopwareAccessTokenQuestion,
-        stageQuestion,
       ]);
       Object.assign(inputParameters, answers);
     }
@@ -72,12 +63,14 @@ module.exports = {
     await toolbox.checkApiCompatibility();
     await toolbox.generateNuxtProject();
 
-    const defaultVersion = availablePwaVersions[0];
-    let stage = inputParameters.stage || defaultVersion;
-    if (inputParameters.stage === "stable") stage = defaultVersion;
+    const packageJson = require(path.join("..", "..", "package.json"));
+    const currentVersion = `^${packageJson.version}`;
+    const isLocalSetup = inputParameters.stage === "local";
 
     const updateConfigSpinner = spin(
-      "Updating configuration for option: " + stage
+      `Updating configuration for v: ${currentVersion}${
+        isLocalSetup ? " - CONTRIBUTION MODE (local setup)" : ""
+      }`
     );
 
     // Adding Shopware PWA core dependencies
@@ -114,22 +107,22 @@ module.exports = {
         delete config.devDependencies[packageName];
       });
 
-      if (stage !== "local") {
+      if (!isLocalSetup) {
         // add dependencies with version
         coreDevPackages.forEach((packageName) => {
-          config.devDependencies[packageName] = stage;
+          config.devDependencies[packageName] = currentVersion;
         });
       } else {
         // add local dependencies and link them
         localCoreDevPackages.forEach((packageName) => {
-          config.devDependencies[packageName] = defaultVersion;
+          config.devDependencies[packageName] = currentVersion;
         });
       }
 
       return sortPackageJson(config);
     });
 
-    if (stage === "local") {
+    if (isLocalSetup) {
       await run(`npx yalc add -D ${localCoreDevPackages.join(" ")}`);
       await run(`yarn link ${localCoreDevPackages.join(" ")}`);
     }

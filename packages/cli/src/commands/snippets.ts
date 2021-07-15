@@ -93,17 +93,8 @@ module.exports = {
     }
 
     // Get Auth Token for API
-    let authToken;
-    try {
-      authToken = await toolbox.fetchPluginsAuthToken(toolbox.inputParameters);
-    } catch (error) {
-      if (error.response.status === 401) {
-        toolbox.print.error("Invalid credentials, aborting snippet import.");
-        return -1;
-      }
-      toolbox.print.error(
-        `Error during API authentication: ${error.response.status} (${error.response.statusText})`
-      );
+    const authToken = await toolbox.auth.getAuthToken();
+    if (!authToken) {
       return -1;
     }
 
